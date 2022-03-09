@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+      
+    backend:
+        image: land_backend:latest
+        container_name: land_backend
+        build:
+            context: ./backend
+        environment:
+            - NODE_ENV=development      
+    frontend:
+        image: land_frontend:latest
+        container_name: land_frontend
+        build:
+            context: ./frontend  
+        environment:
+            - NPM_CONFIG_LOGLEVEL=verbose
+            - NPM_CONFIG_PRODUCTION=false
+            - NODE_ENV=development
+        command: ["sh","-c","yarn install && yarn run dev"]
+        volumes:
+            - yarn-cache:/home/node/.yarn
+            - /usr/src/frontend/node_modules
+            - ./frontend:/usr/src/frontend:rw,cached    
+        ports: 
+            - 3000:3000             
+
+    couchdb:
+        image: couchdb:latest
+        container_name: land_db
+        environment: 
+            - COUCHDB_USER=land
+            - COUCHDB_PASSWORD=land
+        ports:
+            - 5984:5984
+
+volumes:
+    yarn-cache:
+        driver: local         
+   
