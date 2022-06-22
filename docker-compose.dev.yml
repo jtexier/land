@@ -7,7 +7,7 @@ services:
         build:
             context: ./backend
         environment:
-            - NODE_ENV=production
+            - NODE_ENV=development
             - DB_URL=http://land:land@couchdb:5984  
         command: ["sh","-c","yarn install && yarn start"]
 
@@ -15,6 +15,8 @@ services:
             - yarn-cache:/home/node/.yarn
             - /usr/src/backend/node_modules
             - ./backend:/usr/src/backend:rw,cached            
+        ports: 
+            - 4000:4000   
 
     frontend:
         image: land_frontend:latest
@@ -22,8 +24,8 @@ services:
         build:
             context: ./frontend  
         environment:
-            - NODE_ENV=production
-            - REACT_APP_API_URL=http://backend:4000/
+            - NODE_ENV=development
+            - REACT_APP_API_URL=http://localhost:4000/
 
         command: ["sh","-c","yarn install && yarn start"]
         volumes:
@@ -31,7 +33,7 @@ services:
             - /usr/src/frontend/node_modules
             - ./frontend:/usr/src/frontend:rw,cached    
         ports: 
-            - 3001:3000             
+            - 3000:3000             
 
     couchdb:
         image: couchdb:latest
@@ -39,6 +41,8 @@ services:
         environment: 
             - COUCHDB_USER=land
             - COUCHDB_PASSWORD=land
+        ports:
+            - 5984:5984
 
 volumes:
     yarn-cache:

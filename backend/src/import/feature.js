@@ -1,9 +1,7 @@
+
+require("dotenv").config()
 const fs = require('fs')
-
-const nano = require('nano')(
-    { url : "http://land:land@couchdb:5984"
-    });
-
+const nano = require('nano')({ url : process.env.DB_URL });
 
 (async () => {
   const json = fs.readFileSync('./data/cadastre-79174-parcelles.json', 'utf8')

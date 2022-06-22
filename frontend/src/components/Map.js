@@ -1,9 +1,12 @@
 import { MapContainer, LayersControl, TileLayer, GeoJSON, Popup } from 'react-leaflet'
+import { useState } from 'react'
 import { useQuery } from "@apollo/client";
 import { PARCELS } from '../lib/ApolloClient';
 
 const center = [46.210103,-0.148299]
 const Map = () => {
+    const [parcel, setParcel] = useState({});
+
     const { loading, error, data } = useQuery(PARCELS);
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Sorry, something went wrong :(</p>;
@@ -35,6 +38,7 @@ const Map = () => {
                 Surface : {parcel.area} m2<br />
                 Prop. : { parcel.owner }
               </Popup>
+
             </GeoJSON>    
             ))
         }
